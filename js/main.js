@@ -20,6 +20,8 @@
   let userMuted = false;
   let storyOpen = false;
   let specialPlaying = false;
+  let birthdayNode = null;
+  let birthdayActive = false;
 
   function renderHero() {
     $("heroLine").textContent = CONFIG.heroLine;
@@ -331,7 +333,10 @@
       const max = document.documentElement.scrollHeight - window.innerHeight;
       progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", () => {
+      onScroll();
+      if (window.scrollY > 80) stopBirthdayOnScroll();
+    }, { passive: true });
   }
 
   function fadeVolume(el, to, ms) {
@@ -351,6 +356,7 @@
   function playClip(src, volume) {
     return new Promise((resolve) => {
       const node = new Audio(src);
+      birthdayNode = node;
       node.volume = volume;
       node.addEventListener("ended", () => resolve(), { once: true });
       node.addEventListener("error", () => resolve(), { once: true });
@@ -358,21 +364,58 @@
     });
   }
 
+  function sayNishaBirthday() {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const line = new SpeechSynthesisUtterance(`Happy birthday dear ${CONFIG.herName}`);
+    line.rate = 0.88;
+    line.pitch = 1.05;
+    line.volume = 1;
+    window.setTimeout(() => {
+      if (birthdayActive) window.speechSynthesis.speak(line);
+    }, 9000);
+  }
+
+  async function resumeBed() {
+    if (userMuted) return;
+    music.volume = 0.08;
+    await music.play().catch(() => {});
+    musicBtn.classList.add("is-on");
+    await fadeVolume(music, 0.48, 700);
+  }
+
+  function stopBirthdayOnScroll() {
+    if (!birthdayActive) return;
+    const wish = $("wish");
+    if (wish && wish.getBoundingClientRect().bottom > 140) return;
+    birthdayActive = false;
+    specialPlaying = false;
+    if (birthdayNode) {
+      birthdayNode.pause();
+      birthdayNode.currentTime = 0;
+      birthdayNode = null;
+    }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    resumeBed();
+  }
+
   async function playBirthdayThenContinue() {
     const src = CONFIG.sounds && CONFIG.sounds.birthday;
     if (!src || userMuted) return;
+    birthdayActive = true;
     specialPlaying = true;
+    sayNishaBirthday();
     try {
       await fadeVolume(music, 0.06, 320);
+      if (!birthdayActive) return;
       music.pause();
       await playClip(src, 0.8);
     } finally {
       specialPlaying = false;
-      if (!userMuted && storyOpen) {
-        music.volume = 0.08;
-        await music.play().catch(() => {});
-        musicBtn.classList.add("is-on");
-        await fadeVolume(music, 0.48, 700);
+      if (birthdayActive) {
+        birthdayActive = false;
+        birthdayNode = null;
+        await resumeBed();
       }
     }
   }
