@@ -64,8 +64,8 @@ body.is-locked {
   height: 100%;
   border-radius: 0;
   object-position: center 18%;
-  opacity: 0.62;
-  filter: blur(0.6px) saturate(1.12);
+  opacity: 0.32;
+  filter: blur(5px) saturate(1.05);
   transform: scale(1.06);
   animation: photoDrift 28s ease-in-out infinite;
 }
@@ -76,7 +76,8 @@ body.is-locked {
   right: -4%;
   bottom: 6%;
   border-radius: 18px;
-  opacity: 0.28;
+  opacity: 0.16;
+  filter: blur(6px);
   animation: photoDrift 24s ease-in-out infinite;
   animation-delay: -8s;
 }
@@ -87,7 +88,8 @@ body.is-locked {
   left: -3%;
   top: 12%;
   border-radius: 18px;
-  opacity: 0.22;
+  opacity: 0.14;
+  filter: blur(6px);
   animation: photoDrift 26s ease-in-out infinite;
   animation-delay: -14s;
 }
@@ -992,7 +994,7 @@ a {
 }
 
 .gallery-card.in {
-  animation: cardIn 0.7s var(--d, 0s) ease forwards;
+  animation: cardIn 0.4s var(--d, 0s) ease forwards;
 }
 
 .gallery-card:nth-child(3) {
@@ -1214,8 +1216,8 @@ a {
   }
 
   .photo-bg.is-on img:nth-child(1) {
-    opacity: 0.5;
-    filter: blur(1px);
+    opacity: 0.28;
+    filter: blur(4.5px);
   }
 
   .photo-bg.is-on img:nth-child(2),
