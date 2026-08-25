@@ -94,13 +94,14 @@
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           entry.target.classList.add("in");
+          io.unobserve(entry.target);
           if (entry.target.id === "letter" && !typedOnce) {
             typedOnce = true;
             typeLetter();
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
 
     document.querySelectorAll(".reveal-up, .section, .hero, .closing").forEach((el) => io.observe(el));
@@ -111,12 +112,12 @@
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const i = reasons.indexOf(entry.target);
-          entry.target.style.animationDelay = `${i * 0.05}s`;
+          entry.target.style.animationDelay = `${i * 0.06}s`;
           entry.target.classList.add("in");
           rio.unobserve(entry.target);
         });
       },
-      { threshold: 0.35 }
+      { threshold: 0.18 }
     );
     reasons.forEach((li) => rio.observe(li));
   }
@@ -241,7 +242,7 @@
     burst(1.15);
     window.setTimeout(() => burst(0.7), 350);
     $("herGallery")?.querySelectorAll(".gallery-card").forEach((card, i) => {
-      window.setTimeout(() => card.classList.add("in"), 40 + i * 60);
+      window.setTimeout(() => card.classList.add("in"), 180 + i * 140);
     });
 
     if (CONFIG.youtubeId) {
@@ -272,8 +273,8 @@
     window.addEventListener("resize", resize);
 
     const small = window.innerWidth < 760;
-    const dotCount = small ? 28 : 70;
-    const heartCount = small ? 7 : 14;
+    const dotCount = small ? 36 : 80;
+    const heartCount = small ? 18 : 32;
 
     for (let i = 0; i < dotCount; i += 1) {
       dots.push({
@@ -289,9 +290,9 @@
       hearts.push({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        s: Math.random() * 0.7 + 0.35,
-        v: Math.random() * 0.35 + 0.12,
-        a: Math.random() * 0.28 + 0.08,
+        s: Math.random() * 1.05 + 0.55,
+        v: Math.random() * 0.4 + 0.16,
+        a: Math.random() * 0.35 + 0.32,
       });
     }
 
@@ -303,7 +304,7 @@
       ctx.moveTo(0, 4);
       ctx.bezierCurveTo(-9, -4, -6, -12, 0, -8);
       ctx.bezierCurveTo(6, -12, 9, -4, 0, 4);
-      ctx.fillStyle = `rgba(232, 180, 184, ${alpha})`;
+      ctx.fillStyle = `rgba(232, 160, 168, ${alpha})`;
       ctx.fill();
       ctx.restore();
     };

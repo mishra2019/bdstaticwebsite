@@ -870,11 +870,11 @@ a {
   padding: 1rem 1.15rem;
   text-align: left;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(14px);
 }
 
 .reason-list li.in {
-  animation: rise 0.35s ease forwards;
+  animation: rise 0.4s ease forwards;
 }
 
 .reason-list li span {
@@ -992,7 +992,7 @@ a {
 }
 
 .gallery-card.in {
-  animation: cardIn 0.35s var(--d, 0s) ease forwards;
+  animation: cardIn 0.7s var(--d, 0s) ease forwards;
 }
 
 .gallery-card:nth-child(3) {
@@ -1102,7 +1102,7 @@ a {
 .reveal-up {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .reveal-up.in {
