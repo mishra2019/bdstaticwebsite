@@ -570,9 +570,12 @@
 
   function renderPhotoBg() {
     const root = $("photoBg");
-    if (!root || !photoUrls.length) return;
+    if (!root) return;
+    const shots = [0, 1, 8]
+      .map((index) => CONFIG.memories[index] && CONFIG.memories[index].photo)
+      .filter(Boolean);
     root.innerHTML = "";
-    photoUrls.slice(0, 6).forEach((src) => {
+    shots.forEach((src) => {
       const img = document.createElement("img");
       img.src = src;
       img.alt = "";
@@ -656,12 +659,4 @@
   setupMusic();
   startParticles();
   startApp();
-  unlockPhotos("26august")
-    .then(() => {
-      renderMemories();
-      renderHerGallery();
-      renderPhotoBg();
-      observeReveals();
-    })
-    .catch(() => {});
 })();
