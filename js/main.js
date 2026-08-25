@@ -100,7 +100,7 @@
           }
         });
       },
-      { threshold: 0.22 }
+      { threshold: 0.12 }
     );
 
     document.querySelectorAll(".reveal-up, .section, .hero, .closing").forEach((el) => io.observe(el));
@@ -111,7 +111,7 @@
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const i = reasons.indexOf(entry.target);
-          entry.target.style.animationDelay = `${i * 0.12}s`;
+          entry.target.style.animationDelay = `${i * 0.05}s`;
           entry.target.classList.add("in");
           rio.unobserve(entry.target);
         });
@@ -241,7 +241,7 @@
     burst(1.15);
     window.setTimeout(() => burst(0.7), 350);
     $("herGallery")?.querySelectorAll(".gallery-card").forEach((card, i) => {
-      window.setTimeout(() => card.classList.add("in"), 180 + i * 140);
+      window.setTimeout(() => card.classList.add("in"), 40 + i * 60);
     });
 
     if (CONFIG.youtubeId) {

@@ -869,12 +869,12 @@ a {
   border-radius: 16px;
   padding: 1rem 1.15rem;
   text-align: left;
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .reason-list li.in {
-  animation: none;
+  animation: rise 0.35s ease forwards;
 }
 
 .reason-list li span {
@@ -992,7 +992,7 @@ a {
 }
 
 .gallery-card.in {
-  animation: cardIn 0.7s var(--d, 0s) ease forwards;
+  animation: cardIn 0.35s var(--d, 0s) ease forwards;
 }
 
 .gallery-card:nth-child(3) {
@@ -1099,7 +1099,12 @@ a {
   }
 }
 
-.reveal-up,
+.reveal-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
 .reveal-up.in {
   opacity: 1;
   transform: none;
