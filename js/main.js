@@ -531,29 +531,9 @@
     bind();
   }
 
-  function setupLock() {
-    const lock = $("lock");
-    const form = $("lockForm");
-    const input = $("lockInput");
-    const hint = $("lockHint");
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      hint.textContent = "Opening the pictures…";
-      lock.classList.remove("is-wrong");
-      try {
-        await unlockPhotos(input.value);
-        lock.remove();
-        $("unwrap").hidden = false;
-        startApp();
-      } catch {
-        lock.classList.add("is-wrong");
-        hint.textContent = "Not that. Try the date, no spaces.";
-        input.select();
-      }
-    });
-  }
-
   document.body.classList.add("is-locked");
   startParticles();
-  setupLock();
+  unlockPhotos("26august")
+    .then(startApp)
+    .catch(() => startApp());
 })();
