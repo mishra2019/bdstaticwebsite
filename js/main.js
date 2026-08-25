@@ -378,23 +378,23 @@
   }
 
   function keepMusicOn() {
-    if (!CONFIG.musicSrc || userMuted || !storyOpen || specialPlaying) return;
+    if (!CONFIG.musicSrc || userMuted || specialPlaying) return;
     if (music.paused) {
       music.play().then(() => musicBtn.classList.add("is-on")).catch(() => {});
     }
   }
 
   function setupMusic() {
-    if (!CONFIG.musicSrc) return;
+    if (!CONFIG.musicSrc || !music) return;
     music.src = CONFIG.musicSrc;
-    music.volume = 0.48;
     music.loop = true;
+    music.volume = 0.48;
     musicBtn.hidden = false;
     music.addEventListener("error", () => {
       musicBtn.hidden = true;
     });
     music.addEventListener("pause", () => {
-      if (!userMuted && storyOpen && !specialPlaying) {
+      if (!userMuted && !specialPlaying) {
         window.setTimeout(keepMusicOn, 120);
       }
     });
@@ -402,6 +402,7 @@
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) keepMusicOn();
     });
+    window.addEventListener("pointerdown", keepMusicOn, { passive: true });
     window.addEventListener("touchstart", keepMusicOn, { passive: true });
     window.addEventListener("click", keepMusicOn);
     musicBtn.addEventListener("click", async (event) => {
@@ -420,18 +421,27 @@
         musicBtn.classList.remove("is-on");
       }
     });
+    startMusic();
   }
 
   function startMusic() {
-    if (!CONFIG.musicSrc) return;
+    if (!CONFIG.musicSrc || !music) return;
     userMuted = false;
     storyOpen = true;
     music.volume = 0.48;
-    music.play().then(() => {
+    const play = () => music.play().then(() => {
+      music.muted = false;
       musicBtn.hidden = false;
       musicBtn.classList.add("is-on");
-    }).catch(() => {
-      musicBtn.hidden = false;
+    });
+    play().catch(() => {
+      music.muted = true;
+      play().then(() => {
+        music.muted = false;
+      }).catch(() => {
+        music.muted = false;
+        musicBtn.hidden = false;
+      });
     });
   }
 
@@ -534,11 +544,11 @@
     renderHerGallery();
     observeReveals();
     trackProgress();
-    setupMusic();
     bind();
   }
 
   document.body.classList.add("is-locked");
+  setupMusic();
   startParticles();
   unlockPhotos("26august")
     .then(startApp)
