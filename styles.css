@@ -45,6 +45,52 @@ body.is-locked {
   overflow: hidden;
 }
 
+.photo-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.photo-bg img {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 18px;
+  opacity: 0;
+  filter: blur(10px) saturate(1.05);
+  transform: scale(1.08);
+  animation: photoDrift 22s ease-in-out infinite;
+}
+
+.photo-bg.is-on img {
+  opacity: 0.22;
+}
+
+.photo-bg img:nth-child(1) { width: 42vw; height: 56vh; left: -8%; top: -6%; animation-delay: 0s; }
+.photo-bg img:nth-child(2) { width: 34vw; height: 42vh; right: -6%; top: 8%; animation-delay: -4s; }
+.photo-bg img:nth-child(3) { width: 28vw; height: 36vh; left: 8%; bottom: 4%; animation-delay: -8s; }
+.photo-bg img:nth-child(4) { width: 30vw; height: 40vh; right: 10%; bottom: -8%; animation-delay: -12s; }
+.photo-bg img:nth-child(5) { width: 24vw; height: 32vh; left: 38%; top: 28%; animation-delay: -16s; }
+.photo-bg img:nth-child(6) { width: 26vw; height: 34vh; right: 28%; top: -4%; animation-delay: -7s; }
+
+@keyframes photoDrift {
+  50% {
+    transform: scale(1.16) translate3d(12px, -18px, 0);
+    opacity: 0.3;
+  }
+}
+
+.photo-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 50% 18%, rgba(11, 16, 32, 0.28), transparent 55%),
+    linear-gradient(180deg, rgba(11, 16, 32, 0.55), rgba(11, 16, 32, 0.78) 40%, rgba(12, 10, 20, 0.88));
+}
+
 .orbs {
   position: fixed;
   inset: 0;
@@ -208,6 +254,20 @@ body.is-locked {
   animation: veil 0.9s 0.35s ease forwards;
 }
 
+.unwrap.is-opening .gift {
+  animation: giftBurst 0.8s ease forwards;
+}
+
+@keyframes giftBurst {
+  40% {
+    transform: scale(1.12) rotate(-6deg);
+  }
+  100% {
+    transform: scale(0.4) translateY(-40px);
+    opacity: 0;
+  }
+}
+
 @keyframes veil {
   to {
     opacity: 0;
@@ -351,6 +411,8 @@ a {
 
 .btn {
   appearance: none;
+  position: relative;
+  overflow: hidden;
   border: 0;
   cursor: pointer;
   font-family: var(--font-sans);
@@ -363,6 +425,55 @@ a {
   border-radius: 999px;
   box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn.is-pop {
+  animation: btnPop 0.55s ease;
+}
+
+@keyframes btnPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.94); }
+  70% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.ripple {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: rgba(255, 248, 220, 0.55);
+  pointer-events: none;
+  animation: rippleOut 0.7s ease-out forwards;
+}
+
+@keyframes rippleOut {
+  to {
+    transform: scale(22);
+    opacity: 0;
+  }
+}
+
+.click-spark {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #f0d78c;
+  box-shadow: 0 0 10px #f0d78c;
+  pointer-events: none;
+  z-index: 50;
+  animation: sparkFly 0.7s ease-out forwards;
+}
+
+@keyframes sparkFly {
+  to {
+    transform: translate(var(--x), var(--y)) scale(0.2);
+    opacity: 0;
+  }
 }
 
 .btn:not(.ghost) {
@@ -616,6 +727,10 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: center;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 .hint {
@@ -1085,6 +1200,18 @@ a {
     height: 56px;
   }
 
+  .photo-bg img:nth-child(1),
+  .photo-bg img:nth-child(2),
+  .photo-bg img:nth-child(3) {
+    width: 70vw;
+    height: 46vh;
+    filter: blur(8px);
+  }
+
+  .photo-bg img:nth-child(n + 4) {
+    display: none;
+  }
+
   .her-gallery {
     gap: 0.85rem 0.55rem;
   }
@@ -1110,7 +1237,11 @@ a {
   .unwrap-kicker,
   .btn:not(.ghost),
   .polaroid img.is-ready,
-  .reveal-line {
+  .reveal-line,
+  .photo-bg img,
+  .btn.is-pop,
+  .ripple,
+  .click-spark {
     animation: none;
   }
 

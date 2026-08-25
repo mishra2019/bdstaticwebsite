@@ -22,6 +22,7 @@
   let specialPlaying = false;
   let birthdayNode = null;
   let birthdayActive = false;
+  let photoUrls = [];
 
   function renderHero() {
     $("heroLine").textContent = CONFIG.heroLine;
@@ -150,6 +151,10 @@
     });
     wishGranted.classList.add("show");
     wishHint.textContent = "";
+    ["wishActions", "wishLede", "micBtn", "blowBtn"].forEach((id) => {
+      const el = $(id);
+      if (el) el.hidden = true;
+    });
     stopMic();
     playBirthdayThenContinue();
     burst(0.6);
@@ -229,6 +234,8 @@
 
   function openSurprise() {
     const reveal = $("reveal");
+    if ($("surpriseBtn")) $("surpriseBtn").hidden = true;
+    if ($("surpriseLede")) $("surpriseLede").hidden = true;
     reveal.hidden = false;
     reveal.classList.add("is-open");
     burst(1.15);
@@ -542,6 +549,56 @@
     CONFIG.herPhotos.forEach((item) => {
       item.photo = map[item.photo];
     });
+    photoUrls = [0, 1, 2, 8, 9, 10]
+      .map((index) => CONFIG.memories[index] && CONFIG.memories[index].photo)
+      .filter(Boolean);
+  }
+
+  function renderPhotoBg() {
+    const root = $("photoBg");
+    if (!root || !photoUrls.length) return;
+    root.innerHTML = "";
+    photoUrls.slice(0, 6).forEach((src) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "";
+      root.appendChild(img);
+    });
+    root.classList.add("is-on");
+  }
+
+  function playButtonMotion(event) {
+    const btn = event.currentTarget;
+    if (!btn) return;
+    btn.classList.remove("is-pop");
+    void btn.offsetWidth;
+    btn.classList.add("is-pop");
+    window.setTimeout(() => btn.classList.remove("is-pop"), 560);
+
+    const rect = btn.getBoundingClientRect();
+    const x = event.clientX || rect.left + rect.width / 2;
+    const y = event.clientY || rect.top + rect.height / 2;
+    if (btn.classList.contains("btn")) {
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = `${x - rect.left}px`;
+      ripple.style.top = `${y - rect.top}px`;
+      btn.appendChild(ripple);
+      window.setTimeout(() => ripple.remove(), 700);
+    }
+
+    for (let i = 0; i < 10; i += 1) {
+      const spark = document.createElement("i");
+      spark.className = "click-spark";
+      const angle = (Math.PI * 2 * i) / 10;
+      const dist = 28 + Math.random() * 36;
+      spark.style.left = `${x}px`;
+      spark.style.top = `${y}px`;
+      spark.style.setProperty("--x", `${Math.cos(angle) * dist}px`);
+      spark.style.setProperty("--y", `${Math.sin(angle) * dist}px`);
+      document.body.appendChild(spark);
+      window.setTimeout(() => spark.remove(), 720);
+    }
   }
 
   function on(id, event, handler) {
@@ -550,10 +607,14 @@
   }
 
   function bind() {
+    document.querySelectorAll(".btn").forEach((btn) => {
+      btn.addEventListener("click", playButtonMotion);
+    });
     on("unwrapBtn", "click", openStory);
     on("blowBtn", "click", blowOut);
     on("micBtn", "click", listenForBlow);
     if (cake) {
+      cake.addEventListener("click", playButtonMotion);
       cake.addEventListener("click", blowOut);
       cake.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -571,6 +632,7 @@
     renderMemories();
     renderReasons();
     renderHerGallery();
+    renderPhotoBg();
     observeReveals();
     trackProgress();
     bind();

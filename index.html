@@ -11,9 +11,11 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=7" />
   </head>
   <body>
+    <div class="photo-bg" id="photoBg" aria-hidden="true"></div>
+    <div class="photo-veil" aria-hidden="true"></div>
     <div class="orbs" aria-hidden="true">
       <span></span><span></span><span></span>
     </div>
@@ -49,7 +51,7 @@
       <section class="section wish" id="wish">
         <p class="kicker">two.</p>
         <h2>Make a wish</h2>
-        <p class="lede">Blow out the candles. You can use your breath — or just tap the cake.</p>
+        <p class="lede" id="wishLede">Blow out the candles. You can use your breath — or just tap the cake.</p>
 
         <div class="cake-stage">
           <div class="cake" id="cake" role="button" tabindex="0" aria-label="Blow out the candles">
@@ -61,7 +63,7 @@
           </div>
         </div>
 
-        <div class="wish-actions">
+        <div class="wish-actions" id="wishActions">
           <button class="btn ghost" id="micBtn" type="button">Use my breath</button>
           <button class="btn" id="blowBtn" type="button">Tap to blow</button>
         </div>
@@ -96,7 +98,7 @@
       <section class="section surprise" id="surprise">
         <p class="kicker">six.</p>
         <h2>One last thing</h2>
-        <p class="lede">You can stop here. Or you can open this.</p>
+        <p class="lede" id="surpriseLede">You can stop here. Or you can open this.</p>
         <button class="btn big" id="surpriseBtn" type="button"></button>
         <div class="reveal" id="reveal" hidden>
           <p class="script reveal-line" id="surpriseLine"></p>
@@ -121,7 +123,7 @@
     <audio id="music" loop preload="auto" playsinline autoplay></audio>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script src="js/config.js?v=6"></script>
-    <script src="js/main.js?v=6"></script>
+    <script src="js/config.js?v=7"></script>
+    <script src="js/main.js?v=7"></script>
   </body>
 </html>
