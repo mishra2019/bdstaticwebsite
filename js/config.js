@@ -118,8 +118,8 @@ Yours,`,
 
   youtubeId: "",
   spotifyEmbed: "",
-  musicSrc: "audio/song.m4a?v=2",
+  musicSrc: "audio/song.m4a?v=3",
   sounds: {
-    birthday: "audio/birthday.m4a?v=2",
+    birthday: "audio/birthday.m4a?v=3",
   },
 };

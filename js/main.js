@@ -505,18 +505,25 @@
     });
   }
 
+  function on(id, event, handler) {
+    const el = $(id);
+    if (el) el.addEventListener(event, handler);
+  }
+
   function bind() {
-    unwrapBtn.addEventListener("click", openStory);
-    $("blowBtn").addEventListener("click", blowOut);
-    $("micBtn").addEventListener("click", listenForBlow);
-    cake.addEventListener("click", blowOut);
-    cake.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        blowOut();
-      }
-    });
-    $("surpriseBtn").addEventListener("click", openSurprise);
+    on("unwrapBtn", "click", openStory);
+    on("blowBtn", "click", blowOut);
+    on("micBtn", "click", listenForBlow);
+    if (cake) {
+      cake.addEventListener("click", blowOut);
+      cake.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          blowOut();
+        }
+      });
+    }
+    on("surpriseBtn", "click", openSurprise);
   }
 
   function startApp() {
