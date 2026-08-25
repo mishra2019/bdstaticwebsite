@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>For Nisha — 26 August</title>
+    <meta name="description" content="A little something, made just for you." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="orbs" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <canvas id="particles" aria-hidden="true"></canvas>
+
+    <div class="lock" id="lock">
+      <p class="unwrap-kicker">A small key first</p>
+      <h1 class="unwrap-title">For your eyes only</h1>
+      <p class="unwrap-sub">Type the date. No spaces. Then the gift opens.</p>
+      <form class="lock-form" id="lockForm">
+        <label class="sr-only" for="lockInput">Secret word</label>
+        <input id="lockInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="the date" required />
+        <button class="btn" type="submit">Open</button>
+      </form>
+      <p class="hint" id="lockHint"></p>
+    </div>
+
+    <div class="unwrap" id="unwrap" hidden>
+      <p class="unwrap-kicker">26 August · For your eyes first</p>
+      <div class="gift" aria-hidden="true">
+        <div class="gift-bow"></div>
+        <div class="gift-lid"></div>
+        <div class="gift-box">
+          <span>N</span>
+        </div>
+      </div>
+      <h1 class="unwrap-title">A little something for you</h1>
+      <p class="unwrap-sub">Unwrap it slowly. There is no rush.</p>
+      <button class="btn" id="unwrapBtn" type="button">Unwrap</button>
+    </div>
+
+    <main id="story" class="story" hidden>
+      <section class="hero" id="hero">
+        <p class="kicker">one.</p>
+        <h1 class="script" id="heroLine"></h1>
+        <p class="lede" id="heroSub"></p>
+        <a class="scroll-hint" href="#wish">
+          <span>begin</span>
+          <i></i>
+        </a>
+      </section>
+
+      <section class="section wish" id="wish">
+        <p class="kicker">two.</p>
+        <h2>Make a wish</h2>
+        <p class="lede">Blow out the candles. You can use your breath — or just tap the cake.</p>
+
+        <div class="cake-stage">
+          <div class="cake" id="cake" role="button" tabindex="0" aria-label="Blow out the candles">
+            <div class="candles" id="candles"></div>
+            <div class="frosting"></div>
+            <div class="layer layer-top"></div>
+            <div class="layer layer-mid"></div>
+            <div class="plate"></div>
+          </div>
+        </div>
+
+        <div class="wish-actions">
+          <button class="btn ghost" id="micBtn" type="button">Use my breath</button>
+          <button class="btn" id="blowBtn" type="button">Tap to blow</button>
+        </div>
+        <p class="hint" id="wishHint"></p>
+        <p class="wish-granted" id="wishGranted">Wish granted. Keep scrolling.</p>
+      </section>
+
+      <section class="section lane" id="lane">
+        <p class="kicker">three.</p>
+        <h2>Memory lane</h2>
+        <p class="lede">A few pages from our story. Not all of them — just the ones that still glow.</p>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="section reasons" id="reasons">
+        <p class="kicker">four.</p>
+        <h2>Why I like you</h2>
+        <p class="lede">Things I never say enough, arriving one at a time.</p>
+        <ol class="reason-list" id="reasonList"></ol>
+      </section>
+
+      <section class="section letter-wrap" id="letter">
+        <p class="kicker">five.</p>
+        <h2>What I meant to write down</h2>
+        <article class="paper">
+          <p class="paper-date" id="paperDate">For Nisha, 26 August</p>
+          <p class="typed" id="typed"></p>
+          <p class="sign-off" id="letterSign"></p>
+        </article>
+      </section>
+
+      <section class="section surprise" id="surprise">
+        <p class="kicker">six.</p>
+        <h2>One last thing</h2>
+        <p class="lede">You can stop here. Or you can open this.</p>
+        <button class="btn big" id="surpriseBtn" type="button"></button>
+        <div class="reveal" id="reveal" hidden>
+          <p class="script reveal-line" id="surpriseLine"></p>
+          <p class="wish-copy" id="surpriseWish"></p>
+          <div class="her-gallery" id="herGallery"></div>
+          <div class="embed" id="videoEmbed" hidden></div>
+          <div class="embed" id="spotifyEmbed" hidden></div>
+        </div>
+      </section>
+
+      <footer class="closing" id="closing">
+        <p class="kicker">always.</p>
+        <h2 class="script" id="closeLine"></h2>
+        <p class="lede" id="closeSub"></p>
+        <p class="made" id="made"></p>
+      </footer>
+    </main>
+
+    <button class="music" id="musicBtn" type="button" hidden aria-label="Toggle music">
+      <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+    <audio id="music" loop preload="auto" playsinline autoplay></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
