@@ -506,7 +506,7 @@
       ["deriveKey"]
     );
     return crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt, iterations: 120000, hash: "SHA-256" },
+      { name: "PBKDF2", salt, iterations: 8000, hash: "SHA-256" },
       material,
       { name: "AES-GCM", length: 256 },
       false,
@@ -514,35 +514,49 @@
     );
   }
 
-  async function decryptBin(url, password) {
+  async function decryptBin(url, cryptoKey) {
     const bytes = new Uint8Array(await fetch(url).then((res) => {
       if (!res.ok) throw new Error("missing photo");
       return res.arrayBuffer();
     }));
-    const salt = bytes.slice(0, 16);
     const iv = bytes.slice(16, 28);
     const tag = bytes.slice(28, 44);
     const data = bytes.slice(44);
     const combined = new Uint8Array(data.length + tag.length);
     combined.set(data);
     combined.set(tag, data.length);
-    const key = await deriveKey(password, salt);
-    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, combined);
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, cryptoKey, combined);
     const head = new Uint8Array(plain, 0, 3);
     const type = head[0] === 0xff && head[1] === 0xd8 ? "image/jpeg" : "image/png";
     return URL.createObjectURL(new Blob([plain], { type }));
   }
 
+  async function loadPlainPhoto(binPath) {
+    const pngPath = binPath.replace(/\.bin$/i, ".png");
+    const res = await fetch(pngPath).catch(() => null);
+    if (res && res.ok) return pngPath;
+    return "";
+  }
+
   async function unlockPhotos(password) {
-    const key = normalizeKey(password);
+    const keyWord = normalizeKey(password);
     const paths = [...new Set([
       ...CONFIG.memories.map((item) => item.photo),
       ...CONFIG.herPhotos.map((item) => item.photo),
     ])];
     const map = {};
-    await Promise.all(paths.map(async (path) => {
-      map[path] = await decryptBin(path, key);
-    }));
+    const firstPlain = await loadPlainPhoto(paths[0]);
+    if (firstPlain) {
+      await Promise.all(paths.map(async (path) => {
+        map[path] = (await loadPlainPhoto(path)) || path;
+      }));
+    } else {
+      const firstBytes = new Uint8Array(await fetch(paths[0]).then((res) => res.arrayBuffer()));
+      const cryptoKey = await deriveKey(keyWord, firstBytes.slice(0, 16));
+      await Promise.all(paths.map(async (path) => {
+        map[path] = await decryptBin(path, cryptoKey);
+      }));
+    }
     CONFIG.memories.forEach((item) => {
       item.photo = map[item.photo];
     });
@@ -641,7 +655,13 @@
   document.body.classList.add("is-locked");
   setupMusic();
   startParticles();
+  startApp();
   unlockPhotos("26august")
-    .then(startApp)
-    .catch(() => startApp());
+    .then(() => {
+      renderMemories();
+      renderHerGallery();
+      renderPhotoBg();
+      observeReveals();
+    })
+    .catch(() => {});
 })();
