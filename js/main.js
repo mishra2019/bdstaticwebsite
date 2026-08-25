@@ -364,18 +364,6 @@
     });
   }
 
-  function sayNishaBirthday() {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const line = new SpeechSynthesisUtterance(`Happy birthday dear ${CONFIG.herName}`);
-    line.rate = 0.88;
-    line.pitch = 1.05;
-    line.volume = 1;
-    window.setTimeout(() => {
-      if (birthdayActive) window.speechSynthesis.speak(line);
-    }, 9000);
-  }
-
   async function resumeBed() {
     if (userMuted) return;
     music.volume = 0.08;
@@ -395,7 +383,6 @@
       birthdayNode.currentTime = 0;
       birthdayNode = null;
     }
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
     resumeBed();
   }
 
@@ -404,7 +391,6 @@
     if (!src || userMuted) return;
     birthdayActive = true;
     specialPlaying = true;
-    sayNishaBirthday();
     try {
       await fadeVolume(music, 0.06, 320);
       if (!birthdayActive) return;

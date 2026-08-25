@@ -120,6 +120,6 @@ Yours,`,
   spotifyEmbed: "",
   musicSrc: "audio/song.m4a?v=3",
   sounds: {
-    birthday: "audio/birthday.m4a?v=5",
+    birthday: "audio/birthday.m4a?v=6",
   },
 };
